@@ -1,0 +1,8 @@
+{
+    "java.project.sourcePaths": [
+        "Projet"
+    ],
+    "java.project.referencedLibraries": [
+        "Projet/processlibrary.jar"
+    ]
+}
