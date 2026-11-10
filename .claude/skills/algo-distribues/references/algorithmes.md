@@ -60,6 +60,9 @@ Après `run()`, un processus absorbe les messages sans y répondre (`simulateur.
   - l'initiateur envoie à tous ses voisins, puis attend un message de chacun ;
   - un suiveur prend comme père l'émetteur de son premier message, transmet à tous ses voisins sauf son père, attend un message de chaque voisin (père compris), puis renvoie l'écho à son père et s'arrête.
 - Un seul type de message suffit : un message venant d'un non-père vaut écho.
+- **Solution du prof** : `references/EchoChangSegall-prof.java` (TP1). Les variantes demandées ensuite (agrégation, seconde vague) doivent garder ce fonctionnement.
+- **Agrégation avec deux types** : si l'énoncé distingue les échos qui portent des données des jetons de non-fils, utilise `WAVE` (vide) vers les non-pères et `ECHO(données)` vers le père ; chacun compte un message par voisin et n'agrège que les `ECHO`.
+- **Seconde vague** (diffuser un résultat après la décision) : dans la même classe, après l'`ECHO`, chaque processus attend la nouvelle vague, reprend un père, transmet, compte un message par voisin et répond. Les vagues ne se mélangent pas : l'initiateur ne décide qu'une fois que tous ont reçu tous les messages de la première.
 - **Terminaison sûre** : quand un processus s'arrête, il a reçu un message de chaque voisin, donc plus personne ne lui écrira.
 - **Remontée d'information** : chaque message transporte des données, par exemple un ensemble d'identifiants. Chaque processus fusionne ce qu'il reçoit et le renvoie à son père (`assets/EchoCollect.java`).
 - Sur `-unidirectional` avec n ≥ 3, c'est impossible, car il faudrait répondre au père.

@@ -6,7 +6,7 @@ Tout ce qui suit a été vérifié sur le jar du 2023-11-27, soit dans les sourc
 
 ```
 javac -cp processlibrary.jar ensisa/MaClasse.java
-timeout 60 java -jar simulator.jar -n N TOPO [-log niveau] -classpath "processlibrary.jar:." ensisa.MaClasse
+timeout 60 java -jar simulator.jar -n N TOPO [-log niveau] -classpath ".:processlibrary.jar" ensisa.MaClasse
 ```
 
 - `-n N` : de 2 à 20. Valeur par défaut : 4.

@@ -16,8 +16,9 @@ L'utilisateur veut un code sans commentaires, qui se lit comme celui d'un étudi
 ## Démarche
 
 1. **Lire tout le matériel.**
-   - À la racine du dépôt : l'énoncé (`TP n .pdf`) et l'API (`API.pdf`).
-   - Dans `Projet/` : les jar, `readme.txt` et l'exemple du prof (`ensisa/TestMesh1.java` ou équivalent).
+   - Dans le dossier du TP : l'énoncé (`TP n .pdf`, ou `Sujet - EXAM.pdf` pour un examen) et l'API (`API.pdf`).
+   - Dans `Projet/` : les jar, `readme.txt` et l'exemple du prof (`ensisa/TestMesh1.java` ou équivalent). Une archive dézippée peut donner `Projet/Projet/` (avec un `__MACOSX/` à ignorer) : travaille dans le dossier qui contient les jar.
+   - `references/EchoChangSegall-prof.java` est la solution du TP1 donnée par le prof. C'est la référence de fonctionnement pour tout ce qui part de l'écho : le code rendu doit s'y comporter pareil (initiateur 0, envoi à tous les `outNeighbors`, compteur comparé à `inNeighbors.size()`, père = émetteur du premier message), sans en recopier le texte.
    - Le jar contient les sources de la librairie, qui font foi : `unzip -p processlibrary.jar ensisa/process/Process.java` (idem pour `InputMessage.java` et `OutputMessage.java`).
    - `API.pdf` répète ces sources.
    - Si un comportement n'est ni dans les sources ni dans `references/simulateur.md`, consulte le bytecode : `javap -c -p -cp processlibrary.jar ensisa.process.PrivateNetwork`.
@@ -27,7 +28,8 @@ L'utilisateur veut un code sans commentaires, qui se lit comme celui d'un étudi
    - le ou les initiateurs ;
    - le contenu des messages et le texte exact des affichages ;
    - les noms de classes et les topologies à tester ;
-   - les livrables.
+   - les livrables ;
+   - les commandes de compilation et de lancement de l'énoncé. Elles doivent marcher **telles quelles**, depuis le dossier des jar et sans script : `javac -cp processlibrary.jar ensisa/MyProcess.java` puis `java -jar simulator.jar -n 4 -random -classpath ".:processlibrary.jar" ensisa.MyProcess`, avec le nom de ta classe.
 
    Ce qui est imposé l'emporte sur les assets. Ceux-ci viennent du TP1 (écho) : leur texte, leur initiateur 0 et leurs affichages ne valent que pour ce TP. Les questions théoriques ou sans code se traitent dans le compte-rendu.
 
@@ -36,16 +38,18 @@ L'utilisateur veut un code sans commentaires, qui se lit comme celui d'un étudi
    - Dans ce cas, préfixe tes commandes par `export PATH=/usr/lib/jvm/<jdk>/bin:$PATH`. Ne touche pas au PATH de l'utilisateur : chez lui, il est correct.
    - Valide ensuite le simulateur : compile et lance l'exemple du prof avec la commande de `readme.txt`.
 
-4. **Coder une classe par question**, dans le paquetage `ensisa`, sans toucher à l'exemple du prof, aux jar ni aux classes des TP précédents.
+4. **Coder un seul fichier**, `ensisa/<Algo>.java`, dans le paquetage `ensisa`, sans toucher à l'exemple du prof, aux jar ni aux classes des TP précédents.
+   - Le livrable est un seul fichier source. Quand une partie étend la précédente (« lorsque l'initiateur a calculé…, il relance… », « modifiez le programme pour… »), la même classe fait tout, partie après partie. Ne crée une classe par question que si l'énoncé le demande, ou si deux questions sont incompatibles dans un même programme.
+   - Sans nom imposé, nomme la classe d'après l'algorithme, comme le prof : `EchoChangSegall`, `ChangRoberts`, `Tarry`.
    - Commence par lire `references/style.md` et `references/simulateur.md`.
    - Dans `references/algorithmes.md`, lis la section 1 (structure commune), puis seulement la fiche de ton algorithme.
    - `assets/Echo.java` montre la forme attendue : squelette, noms, longueur. Reprends sa structure, pas son contenu.
    - Pour une boucle sur plusieurs types de messages, `assets/ChangRoberts.java` (élection sur anneau) sert d'exemple.
-   - Une question qui étend la précédente (« modifiez le programme pour… ») devient une nouvelle classe copiée de la précédente, pour que les deux versions restent démontrables.
 
 5. **Tester.**
-   - Si `Projet/run.sh` et `Projet/test.sh` existent déjà (TP précédent), garde-les et ajoute une branche pour la nouvelle classe dans le `case` de `check`. Sinon, copie `assets/run.sh` et `assets/test.sh`.
-   - Lance d'abord un `./run.sh Classe 5 <topo>` et lis la sortie toi-même. Lance ensuite `./test.sh Classe`, qui teste n = 2, 3, 4, 8, 15, 20.
+   - Commence par les commandes exactes de l'énoncé (`javac` sans option, puis `java -jar simulator.jar … -classpath ".:processlibrary.jar" ensisa.<Algo>`, sous `timeout 60`), sans passer par les scripts. Vérifie aussi `javac -Xlint -Werror`.
+   - Si `Projet/run.sh` et `Projet/test.sh` existent déjà (TP précédent), garde-les et adapte `check`. Sinon, copie `assets/run.sh` et `assets/test.sh`. Ces scripts aident à tester ; ils ne remplacent pas les commandes de l'énoncé.
+   - Lance ensuite un `./run.sh Classe 5 <topo>` et lis la sortie toi-même. Lance ensuite `./test.sh Classe`, qui teste n = 2, 3, 4, 8, 15, 20.
    - Adapte `topologies` : ajoute `-unidirectional` si l'algorithme s'y applique, retire ce qui ne s'applique pas.
    - Adapte `check` à l'algorithme. Par défaut, seul `-random` est répété ; si l'algorithme tire des valeurs au hasard, répète toutes les topologies (`runs=5` partout).
    - Si la sortie dépend de valeurs aléatoires, `check` relit les valeurs affichées et recalcule le résultat attendu, au lieu de chercher une ligne fixe. `assets/test-election.sh` le fait avec un petit `awk`.
@@ -67,7 +71,7 @@ L'utilisateur veut un code sans commentaires, qui se lit comme celui d'un étudi
 
 - `-unidirectional` : on ne peut envoyer qu'à `id+1`. Tout algorithme qui répond à l'émetteur, comme l'écho, y est impossible dès que n ≥ 3. Avec n=2, l'anneau contient 0→1 et 1→0, donc l'écho y fonctionne par hasard.
   - `send()` revient normalement : c'est le simulateur qui affiche `No communication channel`.
-  - Ensuite, plus rien de cet émetteur n'est relayé, et la simulation se bloque jusqu'au timeout.
+  - Ensuite, plus rien de cet émetteur n'est relayé. Selon l'algorithme, la simulation se bloque jusqu'au timeout, ou se termine avec un résultat faux (l'écho : 0 reçoit la vague relayée par n-1, la compte et conclut seul).
   - Un try/catch ne peut pas intercepter cette erreur.
 - `inNeighbors` et `outNeighbors` contiennent les mêmes voisins, mais pas dans le même ordre. Ne suppose aucun ordre.
 - L'ordre des affichages varie d'une exécution à l'autre. Teste la présence et le nombre des lignes, pas leur ordre.
@@ -82,7 +86,7 @@ Le reste est dans `references/simulateur.md` : API, format des messages, types r
 
 ## Rendu attendu
 
-- `Projet/ensisa/<Algo>.java`, plus une classe par extension : compile sans avertissement, sans commentaires.
+- `Projet/ensisa/<Algo>.java`, un seul fichier qui couvre toutes les parties : compile sans avertissement, sans commentaires, et se lance avec les commandes de l'énoncé sans script.
 - `Projet/run.sh` et `Projet/test.sh` : `test.sh` affiche `N OK, 0 ECHEC`.
 - Le compte-rendu.
 

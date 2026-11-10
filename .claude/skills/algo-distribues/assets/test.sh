@@ -50,7 +50,7 @@ for topo in $topologies; do
 
     for n in $sizes; do
         for run in $(seq $runs); do
-            out=$(timeout 60 java -jar simulator.jar -n $n $topo -classpath "processlibrary.jar:." ensisa.$class 2>&1)
+            out=$(timeout 60 java -jar simulator.jar -n $n $topo -classpath ".:processlibrary.jar" ensisa.$class 2>&1)
             code=$?
             errors=$(check "$out" $n)
 

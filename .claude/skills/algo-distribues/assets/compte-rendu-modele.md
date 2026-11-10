@@ -8,10 +8,16 @@
 
 ## Fichiers
 
-- `ensisa/<Algo>.java` : question <X>
-- `ensisa/<AlgoExtension>.java` : question <Y>
+- `ensisa/<Algo>.java` : le livrable, un seul fichier qui traite toutes les questions
 - `run.sh` : compile et lance une simulation, ex. `./run.sh <Algo> 8 -random`
 - `test.sh` : lance toutes les topologies et vérifie les sorties, ex. `./test.sh <Algo>`
+
+Les scripts ne sont pas nécessaires. Depuis ce dossier, les commandes de l'énoncé suffisent :
+
+```
+javac -cp processlibrary.jar ensisa/<Algo>.java
+java -jar simulator.jar -n 4 -random -classpath ".:processlibrary.jar" ensisa.<Algo>
+```
 
 ## Principe
 
@@ -39,7 +45,7 @@
 
 ## Question <Y>
 
-<Format du message, ce que chaque processus garde, ce qui est affiché, une sortie réelle.>
+<Ce que la même classe fait en plus pour cette question : format du message, ce que chaque processus garde, ce qui est affiché, une sortie réelle.>
 
 ## Tests
 
