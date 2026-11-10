@@ -19,7 +19,6 @@ public class EchoChangSegall extends Process {
         var process = new EchoChangSegall();
         process.start();
     }
-
     public void run() throws Exception {
         int temperature = 10 + new Random().nextInt(21);
         int sum = temperature;
