@@ -7,15 +7,16 @@ import ensisa.process.Process;
 import java.io.IOException;
 import java.util.Random;
 
-public class EchoTemperature extends Process {
+public class EchoChangSegall extends Process {
     static final int WAVE = 0;
     static final int ECHO = 1;
+    static final int AVERAGE = 2;
 
-    public EchoTemperature() throws IOException {
+    public EchoChangSegall() throws IOException {
     }
 
     public static void main(String[] args) throws Exception {
-        var process = new EchoTemperature();
+        var process = new EchoChangSegall();
         process.start();
     }
 
@@ -47,14 +48,41 @@ public class EchoTemperature extends Process {
             count++;
         }
 
+        double average;
+        count = 0;
         if (id == 0) {
-            double average = (double) sum / sensors;
+            average = (double) sum / sensors;
             System.out.println("Processus 0 : température moyenne " + average + " (" + sum + " / " + sensors + ")");
         } else {
             OutputMessage echo = new OutputMessage(ECHO);
             echo.writeInt(sum);
             echo.writeInt(sensors);
             send(father, echo);
+
+            InputMessage first = receive();
+            father = first.senderProcessId;
+            average = first.stream().readDouble();
+            count++;
+            System.out.println("Processus " + id + " : température " + temperature + ", moyenne reçue " + average);
+        }
+
+        OutputMessage result = new OutputMessage(AVERAGE);
+        result.stream().writeDouble(average);
+        for (int neighbor : outNeighbors) {
+            if (neighbor != father) {
+                send(neighbor, result);
+            }
+        }
+
+        while (count < inNeighbors.size()) {
+            receive();
+            count++;
+        }
+
+        if (id == 0) {
+            System.out.println("Processus 0 : diffusion de la moyenne terminée");
+        } else {
+            send(father, result);
         }
     }
 }

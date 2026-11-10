@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-class=${1:-EchoTemperature}
+class=${1:-EchoChangSegall}
 topologies="-bidirectional -mesh -random"
 sizes="2 3 4 8 15 20"
 
@@ -34,28 +34,19 @@ check() {
         return
     fi
 
-    case $class in
-    EchoTemperature)
-        ;;
-    EchoTemperatureDiffusion)
-        if [ $(grep -c "moyenne reçue" <<< "$out") -ne $((n - 1)) ]; then
-            echo -n " receptions"
+    if [ $(grep -c "moyenne reçue" <<< "$out") -ne $((n - 1)) ]; then
+        echo -n " receptions"
+    fi
+    for i in $(seq 1 $((n - 1))); do
+        t=$(temperature "$out" $i)
+        c=$(grep -cxF "Processus $i : température $t, moyenne reçue $average" <<< "$out")
+        if [ $c -ne 1 ]; then
+            echo -n " p$i:${c}x"
         fi
-        for i in $(seq 1 $((n - 1))); do
-            t=$(temperature "$out" $i)
-            c=$(grep -cxF "Processus $i : température $t, moyenne reçue $average" <<< "$out")
-            if [ $c -ne 1 ]; then
-                echo -n " p$i:${c}x"
-            fi
-        done
-        if ! grep -qx "Processus 0 : diffusion de la moyenne terminée" <<< "$out"; then
-            echo -n " pas_de_fin"
-        fi
-        ;;
-    *)
-        echo -n " pas_de_check"
-        ;;
-    esac
+    done
+    if ! grep -qx "Processus 0 : diffusion de la moyenne terminée" <<< "$out"; then
+        echo -n " pas_de_fin"
+    fi
 }
 
 javac -Xlint -Werror -cp processlibrary.jar ensisa/$class.java || exit 1
@@ -71,7 +62,7 @@ for topo in $topologies; do
 
     for n in $sizes; do
         for run in $(seq $runs); do
-            out=$(timeout 60 java -jar simulator.jar -n $n $topo -classpath "processlibrary.jar:." ensisa.$class 2>&1)
+            out=$(timeout 60 java -jar simulator.jar -n $n $topo -classpath ".:processlibrary.jar" ensisa.$class 2>&1)
             code=$?
             errors=$(check "$out" $n)
 
