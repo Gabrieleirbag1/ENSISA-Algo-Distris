@@ -7,16 +7,16 @@ import ensisa.process.Process;
 import java.io.IOException;
 import java.util.Random;
 
-public class EchoChangSegall extends Process {
+public class EchoChangSegallGabrielGarrone extends Process {
     static final int WAVE = 0;
     static final int ECHO = 1;
     static final int RESULT = 2;
 
-    public EchoChangSegall() throws IOException {
+    public EchoChangSegallGabrielGarrone() throws IOException {
     }
 
     public static void main(String[] args) throws Exception {
-        var process = new EchoChangSegall();
+        var process = new EchoChangSegallGabrielGarrone();
         process.start();
     }
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-class=${1:-EchoChangSegall}
+class=${1:-EchoChangSegallGabrielGarrone}
 topologies="-bidirectional -mesh -random"
 sizes="2 3 4 8 15 20"
 runs=5

@@ -2,15 +2,15 @@
 
 ## Fichiers
 
-- `ensisa/EchoChangSegall.java` : le livrable, un seul fichier qui enchaîne les deux parties (calcul du minimum et du maximum, puis diffusion)
-- `run.sh` : compile et lance une simulation, ex. `./run.sh EchoChangSegall 8 -random`
+- `ensisa/EchoChangSegallGabrielGarrone.java` : le livrable, un seul fichier qui enchaîne les deux parties (calcul du minimum et du maximum, puis diffusion)
+- `run.sh` : compile et lance une simulation, ex. `./run.sh EchoChangSegallGabrielGarrone 8 -random`
 - `test.sh` : lance toutes les topologies et vérifie les sorties, ex. `./test.sh`
 
 Les scripts ne sont pas nécessaires. Depuis ce dossier, les commandes de l'énoncé suffisent :
 
 ```
-javac -cp processlibrary.jar ensisa/EchoChangSegall.java
-java -jar simulator.jar -n 4 -random -classpath ".:processlibrary.jar" ensisa.EchoChangSegall
+javac -cp processlibrary.jar ensisa/EchoChangSegallGabrielGarrone.java
+java -jar simulator.jar -n 4 -random -classpath ".:processlibrary.jar" ensisa.EchoChangSegallGabrielGarrone
 ```
 
 ## Première partie
@@ -50,7 +50,7 @@ Les deux vagues ne se mélangent pas. L'initiateur ne décide que lorsque tous l
 
 ## Exemple de sortie
 
-`java -jar simulator.jar -n 4 -random -classpath ".:processlibrary.jar" ensisa.EchoChangSegall`
+`java -jar simulator.jar -n 4 -random -classpath ".:processlibrary.jar" ensisa.EchoChangSegallGabrielGarrone`
 ```
 Processus 0 : température 35
 Processus 1 : température 30
@@ -81,7 +81,7 @@ Résultat : `./test.sh` affiche `90 OK, 0 ECHEC`.
 
 L'écho a besoin de canaux dans les deux sens, puisqu'un capteur répond à son père. Il ne s'applique pas à `-unidirectional` dès que n ≥ 3. Avec n = 3, le processus 0 n'a que 1 comme successeur et 2 comme prédécesseur :
 
-`timeout 60 java -jar simulator.jar -n 3 -unidirectional -classpath ".:processlibrary.jar" ensisa.EchoChangSegall`
+`timeout 60 java -jar simulator.jar -n 3 -unidirectional -classpath ".:processlibrary.jar" ensisa.EchoChangSegallGabrielGarrone`
 ```
 Processus 0 : température 3
 Processus 1 : température 19

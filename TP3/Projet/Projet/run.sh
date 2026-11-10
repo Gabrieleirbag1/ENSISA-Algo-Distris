@@ -2,7 +2,7 @@
 cd "$(dirname "$0")"
 
 if [ $# -lt 3 ]; then
-    echo "usage: ./run.sh EchoChangSegall n topologie [-log debug]"
+    echo "usage: ./run.sh EchoChangSegallGabrielGarrone n topologie [-log debug]"
     exit 1
 fi
 
